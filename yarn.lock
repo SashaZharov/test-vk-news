@@ -1549,7 +1549,7 @@
   dependencies:
     "@remix-run/router" "^1.13.0"
 
-"@vkontakte/vk-miniapps-deploy@^0.1.6":
+"@vkontakte/vk-miniapps-deploy@^0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@vkontakte/vk-miniapps-deploy/-/vk-miniapps-deploy-0.1.7.tgz#c695932cd084586c064d441bb9f2834ae8f7ab2b"
   integrity sha512-SDlz+uysDrz/37nM6+qpNH9FDpWbOJKlRYR6wYklPFVgEwFFUYMjW2e4n6UPmhwP440PUQWx/CECzFeUItMHXg==

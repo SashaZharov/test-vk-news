@@ -14,6 +14,7 @@ import { StoryCard } from "../../../entities/story";
 import { StoryCardProps } from "../../../entities/story";
 import { getStory, getStoryIds } from "../../../shared/api/story";
 import styles from "./styles.module.css";
+import { RawStory } from "../../../shared/api/types";
 
 export const Home: FC<NavIdProps> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,21 +28,13 @@ export const Home: FC<NavIdProps> = ({ id }) => {
     const storyPromises = storyIds
       .slice(0, 100)
       .map((storyId) => getStory(storyId));
-    const storiesData = await Promise.all(storyPromises);
+    const storiesData = (await Promise.all(storyPromises)).filter(
+      Boolean
+    ) as RawStory[];
 
     const formattedStories = storiesData
+      .sort((a, b) => b.time - a.time)
       .map((story) => {
-        if (
-          !story ||
-          !story.id ||
-          !story.title ||
-          !story.by ||
-          !story.score ||
-          !story.time
-        ) {
-          return null;
-        }
-
         return {
           id: story.id,
           title: story.title,
@@ -49,8 +42,7 @@ export const Home: FC<NavIdProps> = ({ id }) => {
           score: story.score,
           time: formatDate(story.time),
         };
-      })
-      .filter((story) => story !== null);
+      });
 
     setStories(formattedStories);
     setLoading(false);

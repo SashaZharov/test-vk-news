@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { RawComment, Comment as CommentType } from "../../../shared/api/types";
+import { Comment as CommentType } from "../../../shared/api/types";
+import { Div } from "@vkontakte/vkui";
 
 export const Comment: FC<CommentType> = ({ id, by, text, time, kids }) => {
-  return <>Отображение комментариев</>;
+  return <Div>{id}</Div>;
 };

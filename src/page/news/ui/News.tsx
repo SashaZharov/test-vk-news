@@ -13,7 +13,12 @@ import {
 } from "@vkontakte/vkui";
 import { useParams, useRouteNavigator } from "@vkontakte/vk-mini-apps-router";
 import { getStory } from "../../../shared/api/story";
-import { RawComment, Story } from "../../../shared/api/types";
+import {
+  RawComment,
+  Story,
+  Comment as CommentType,
+} from "../../../shared/api/types";
+
 import {
   Icon24ExternalLinkOutline,
   Icon24User,
@@ -22,6 +27,7 @@ import {
 
 import { getComment } from "../../../shared/api/comments";
 import { decodeHtml, formatDate } from "../../../shared/utils";
+import { Comment } from "../../../entities/comments";
 
 export const News: FC<NavIdProps> = ({ id }) => {
   const params = useParams<"storyId">()!;
@@ -71,6 +77,7 @@ export const News: FC<NavIdProps> = ({ id }) => {
     };
 
     fetchData();
+    console.log(comments);
   }, [params.storyId]);
 
   return (
@@ -112,6 +119,15 @@ export const News: FC<NavIdProps> = ({ id }) => {
             }
           >
             {/* Comments */}
+            {comments?.map((item) => (
+              <Comment
+                id={item.id}
+                by={item.by}
+                text={item.text}
+                time={item.time}
+                kids={item.kids}
+              />
+            ))}
           </Group>
         </>
       )}

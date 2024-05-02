@@ -6,13 +6,13 @@
 
 - React
 - TypeScript
+- Vk-mini-apps-router
 - VKUI
 
 ## Реализация
 
 - Техническое задание
 - Feature-Sliced Design
-- Vk-mini-apps-router
 - Размещение на платформе VK Mini Apps
 
 ## Запуск
