@@ -26,58 +26,56 @@ import {
 } from "@vkontakte/icons";
 
 import { getComment } from "../../../shared/api/comments";
-import { decodeHtml, formatDate } from "../../../shared/utils";
+import { formatDate } from "../../../shared/utils";
 import { Comment } from "../../../entities/comments";
+import styles from "./styles.module.css"
 
 export const News: FC<NavIdProps> = ({ id }) => {
   const params = useParams<"storyId">()!;
   const routeNavigator = useRouteNavigator();
   const [story, setStory] = useState<Story>();
-  const [comments, setComments] = useState<Comment[]>();
+  const [comments, setComments] = useState<CommentType[]>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-    const storyId = params.storyId;
-    const fetchData = async () => {
-      try {
-        if (storyId) {
-          const rawStory = await getStory(Number(storyId));
+    const storyId = Number(params.storyId);
+    const loadStory = () => {
+      if (!storyId) return;
 
-          if (rawStory) {
-            if (rawStory.kids && rawStory.kids.length > 0) {
-              const promises = rawStory.kids.map((commentId) =>
-                getComment(commentId)
-              );
-              const commentsRawData = (await Promise.all(promises)).filter(
-                Boolean
-              ) as RawComment[];
-              const nonNullComments = commentsRawData
-                .sort((a, b) => b.time - a.time)
-                .map((comment) => ({
-                  ...comment,
-                  text: decodeHtml(comment.text),
-                  time: formatDate(comment.time),
-                })) as unknown as Comment[];
-              setComments(nonNullComments);
-            }
-            const formattedTime = formatDate(rawStory.time);
-            const story: Story = {
-              ...rawStory,
-              time: formattedTime,
-            };
-            setStory(story);
+      getStory(storyId)
+        .then((rawStory) => {
+          if (!rawStory) return;
+          const formattedTime = formatDate(rawStory.time);
+          const story: Story = {
+            ...rawStory,
+            time: formattedTime,
+          };
+          setStory(story);
+
+          if (rawStory.kids && rawStory.kids.length > 0) {
+            return Promise.all(rawStory.kids.map((id) => getComment(id))).then(
+              (commentsRawData) => {
+                const existingComments = commentsRawData.filter((comment) =>
+                  Boolean(comment)
+                ) as RawComment[];
+                const sortedComments = existingComments.sort(
+                  (timeA, timeB) => timeB.time - timeA.time
+                ) as unknown as CommentType[];
+                setComments(sortedComments);
+              }
+            );
           }
-        }
-      } catch (error) {
-        console.error("Failed to fetch story or comments", error);
-      } finally {
-        setIsLoading(false);
-      }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch story or comments", error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     };
 
-    fetchData();
-    console.log(comments);
+    loadStory();
   }, [params.storyId]);
 
   return (
@@ -92,7 +90,7 @@ export const News: FC<NavIdProps> = ({ id }) => {
       ) : (
         <>
           <Group>
-            <Text weight="1" style={{ fontSize: 20, padding: 12 }}>
+            <Text weight="1" className={styles.Story__Title}>
               {story?.title ? story.title : "Без названия"}
             </Text>
             {story?.by && (
@@ -113,20 +111,13 @@ export const News: FC<NavIdProps> = ({ id }) => {
           </Group>
           <Group
             header={
-              <Header mode="secondary">{`Comments: ${
+              <Header mode="secondary">{`Комментарии: ${
                 story?.kids ? story?.kids.length : 0
               }`}</Header>
             }
           >
-            {/* Comments */}
             {comments?.map((item) => (
-              <Comment
-                id={item.id}
-                by={item.by}
-                text={item.text}
-                time={item.time}
-                kids={item.kids}
-              />
+              <Comment key={item.id} {...item} />
             ))}
           </Group>
         </>

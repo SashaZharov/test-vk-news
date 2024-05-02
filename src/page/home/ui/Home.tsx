@@ -13,8 +13,8 @@ import { formatDate } from "../../../shared/utils";
 import { StoryCard } from "../../../entities/story";
 import { StoryCardProps } from "../../../entities/story";
 import { getStory, getStoryIds } from "../../../shared/api/story";
-import styles from "./styles.module.css";
 import { RawStory } from "../../../shared/api/types";
+import styles from "./styles.module.css";
 
 export const Home: FC<NavIdProps> = ({ id }) => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -72,19 +72,12 @@ export const Home: FC<NavIdProps> = ({ id }) => {
         </Div>
 
         {loading && (
-          <Card mode="shadow" className={styles.LoaderCard}>
+          <Card mode="shadow" className={styles.Home__LoaderCard}>
             <Spinner size="large" />
           </Card>
         )}
         {stories.map((story) => (
-          <StoryCard
-            key={story.id}
-            id={story.id}
-            by={story.by}
-            score={story.score}
-            time={story.time}
-            title={story.title}
-          />
+          <StoryCard key={story.id} {...story} />
         ))}
       </Group>
     </Panel>

@@ -12,13 +12,9 @@ export const StoryCard: FC<StoryCardProps> = ({
   score,
 }) => {
   const routeNavigator = useRouteNavigator();
-
+  const handleClick = () => routeNavigator.push(`/news/${id}`);
   return (
-    <CardGrid
-      key={id}
-      size="l"
-      onClick={() => routeNavigator.push(`/news/${id}`)}
-    >
+    <CardGrid key={id} size="l" onClick={handleClick}>
       <ContentCard
         className={styles.Story__Card}
         header={title}

@@ -1,0 +1,11 @@
+.CommentTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8;
+}
+
+.Comment__Caption {
+  margin-top: 8;
+  font-size: 14;
+  cursor: pointer;
+}

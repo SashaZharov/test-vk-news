@@ -1,6 +1,6 @@
-import { fetchData } from "../utils";
-import { NEW_STORIES_URL } from "../config";
+import { fetchData } from "../../utils";
+import { STORIES_URL } from "../config";
 
-export const getStoryIds = async (): Promise<number[] | null> => {
-  return fetchData<number[]>(NEW_STORIES_URL);
+export const getStoryIds = async (): Promise<number[] | undefined> => {
+  return fetchData<number[]>(STORIES_URL);
 };

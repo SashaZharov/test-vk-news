@@ -1,5 +1,4 @@
-export const decodeHtml = (text: string) => {
-  const textArea = document.createElement("textarea");
-  textArea.innerHTML = text;
-  return textArea.value;
+export const decodeHtml = (text: string): string => {
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return doc.documentElement.textContent || "";
 };

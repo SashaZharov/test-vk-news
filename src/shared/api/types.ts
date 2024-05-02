@@ -24,7 +24,7 @@ export type Comment = {
   id: number;
   by: string;
   text: string;
-  time: string;
+  time: number;
   kids?: number[];
 };
 
